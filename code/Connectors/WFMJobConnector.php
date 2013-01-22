@@ -10,11 +10,13 @@ class WFMJobConnector extends WFMConnectorBase {
      *
      * @param SimpleXMLElement $xpath the xml path pointer to the current location of the job element in the XML document.
      *
+     * @param boolean $onlyTrackableJobs true if only active projects should be shown, to filter completed, set this field to TRUE (default).
+     *
      * @throws Exception 
      *
      * @return array a php array representation of the XML elements.
      */
-     private function parseItem(SimpleXMLElement $xpath) {
+     private function parseItem(SimpleXMLElement $xpath, $onlyTrackableJobs = true) {
         if ($xpath == null) {
             throw new Exception('Invalid method call. The XML element is empty.');
         }
@@ -59,6 +61,7 @@ class WFMJobConnector extends WFMConnectorBase {
      * If a project is completed, time records can not be added to that project anymore.
      *
      * @param string $staffID WorkflowMax Staff ID
+     *
      * @param boolean $onlyTrackableJobs true if only active projects should be shown, to filter completed, set this field to TRUE (default).
      *
      * @throws Exceptions
@@ -83,7 +86,7 @@ class WFMJobConnector extends WFMConnectorBase {
         $resultArray = array();
         
         foreach($jobs as $job) {
-            $resultArray[] = parseItem($job);
+            $resultArray[] = parseItem($job, $onlyTrackableJobs);
         }
         return $resultArray;
     }
